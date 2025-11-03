@@ -11,7 +11,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5), // lembut ungu muda
+      backgroundColor: const Color.fromARGB(255, 230, 229, 245), 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -110,7 +110,7 @@ class DashboardPage extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 6,
-        color: color, // ubah warna card sesuai parameter
+        color: color, 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -121,7 +121,7 @@ class DashboardPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // teks putih agar kontras
+                color: Colors.white,
               ),
             ),
           ],

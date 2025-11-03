@@ -3,7 +3,7 @@ import 'calculator_page.dart';
 import 'add_number_page.dart';
 import 'menu3_page.dart';
 import 'menu4_page.dart';
-import 'dashboard_page.dart'; // ✅ tambahkan
+import 'dashboard_page.dart'; 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   int _index = 0;
 
   final List<Widget> _pages = [
-    const DashboardPage(), // ✅ halaman awal setelah login
+    const DashboardPage(), 
     const CalculatorPage(),
     const AddNumberPage(),
     const Menu3Page(),
