@@ -12,7 +12,7 @@ class _AddNumberPageState extends State<AddNumberPage> {
 
   void tambahAngka(String angka) {
     setState(() {
-      input += angka;
+      input = angka;
     });
   }
 
@@ -43,7 +43,6 @@ class _AddNumberPageState extends State<AddNumberPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Tampilan hasil input
             Container(
               alignment: Alignment.centerRight,
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),

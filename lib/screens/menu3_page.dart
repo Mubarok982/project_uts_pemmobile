@@ -16,10 +16,16 @@ class _Menu3PageState extends State<Menu3Page> {
     });
   }
 
+  void minesangka(){
+    setState(() {
+      jumlah--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF4FF), // warna lembut
+      backgroundColor: const Color(0xFFFAF4FF), 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,6 +53,24 @@ class _Menu3PageState extends State<Menu3Page> {
               ),
               child: const Text(
                 'Tambah Angka',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: minesangka,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.deepPurple,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                elevation: 2,
+              ),
+              child: const Text(
+                'Kurangi Angka',
                 style: TextStyle(fontSize: 18),
               ),
             ),

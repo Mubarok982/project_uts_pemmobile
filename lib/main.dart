@@ -7,11 +7,10 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Aplikasi Sederhana',
+      title: 'Flutter Login Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const LoginPage(),
       debugShowCheckedModeBanner: false,
