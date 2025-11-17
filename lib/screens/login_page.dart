@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController userController = TextEditingController();
-    TextEditingController passController = TextEditingController();
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController userController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
+  // Contoh daftar akun yang valid
+  final Map<String, String> validUsers = {
+    "admin": "12345",
+    "eko": "password",
+    "user": "user123"
+  };
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -34,11 +46,8 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.lock_outline,
-                      size: 80,
-                      color: Colors.deepPurple,
-                    ),
+                    const Icon(Icons.lock_outline,
+                        size: 80, color: Colors.deepPurple),
                     const SizedBox(height: 16),
                     const Text(
                       'Login Aplikasi',
@@ -49,6 +58,8 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 30),
+
+                    // Username
                     TextField(
                       controller: userController,
                       decoration: InputDecoration(
@@ -62,6 +73,8 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    // Password
                     TextField(
                       controller: passController,
                       obscureText: true,
@@ -75,7 +88,10 @@ class LoginPage extends StatelessWidget {
                         fillColor: Colors.grey.shade100,
                       ),
                     ),
+
                     const SizedBox(height: 30),
+
+                    // Tombol Login
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -87,10 +103,40 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => const HomePage()),
-                          );
+                          String username =
+                              userController.text.trim().toLowerCase();
+                          String password = passController.text.trim();
+
+                          // Cek input tidak boleh kosong
+                          if (username.isEmpty || password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Username & password wajib diisi!"),
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            return;
+                          }
+
+                          // Cek kecocokan user terdaftar
+                          if (validUsers.containsKey(username) &&
+                              validUsers[username] == password) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const HomePage(),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Username atau password salah!"),
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
                         },
                         child: const Text(
                           'Masuk',
@@ -102,6 +148,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {},
