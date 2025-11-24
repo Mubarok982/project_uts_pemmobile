@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'calculator_page.dart';
 import 'add_number_page.dart';
 import 'menu3_page.dart';
+import 'menu5_page.dart';
 import 'qr_absensi_page.dart';
 import 'login_page.dart';
 
@@ -60,6 +61,13 @@ class DashboardPage extends StatelessWidget {
                     icon: Icons.settings,
                     color: Colors.deepPurple,
                     page: const QrAbsensiPage(),
+                  ),
+                  _buildMenuCard(
+                    context,
+                    title: 'Menu 5',
+                    icon: Icons.settings,
+                    color: Colors.deepPurple,
+                    page: const TampilData(),
                   ),
                 ],
               ),
