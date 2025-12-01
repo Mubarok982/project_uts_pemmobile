@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http; // pastikan http: ^0.14.0 sudah di pubspec.yaml
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,13 +13,75 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController userController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  bool isLoading = false;
 
-  // Contoh daftar akun yang valid
-  final Map<String, String> validUsers = {
-    "admin": "12345",
-    "eko": "password",
-    "user": "user123"
-  };
+  Future<void> login() async {
+    String username = userController.text.trim();
+    String password = passController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Username & password wajib diisi!"),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://dummyjson.com/auth/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+          'expiresInMins': 30, // optional
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        String accessToken = data['accessToken'];
+        String refreshToken = data['refreshToken'];
+
+        // TODO: simpan token di secure storage atau shared preferences jika perlu
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      } else {
+        final error = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error['message'] ?? 'Login gagal'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Terjadi kesalahan: $e'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-
-                    // Username
                     TextField(
                       controller: userController,
                       decoration: InputDecoration(
@@ -73,8 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-
-                    // Password
                     TextField(
                       controller: passController,
                       obscureText: true,
@@ -88,10 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                         fillColor: Colors.grey.shade100,
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
-                    // Tombol Login
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -102,53 +159,20 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
-                          String username =
-                              userController.text.trim().toLowerCase();
-                          String password = passController.text.trim();
-
-                          // Cek input tidak boleh kosong
-                          if (username.isEmpty || password.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Username & password wajib diisi!"),
-                                backgroundColor: Colors.red,
-                                duration: Duration(seconds: 2),
+                        onPressed: isLoading ? null : login,
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text(
+                                'Masuk',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            );
-                            return;
-                          }
-
-                          // Cek kecocokan user terdaftar
-                          if (validUsers.containsKey(username) &&
-                              validUsers[username] == password) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const HomePage(),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Username atau password salah!"),
-                                backgroundColor: Colors.red,
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'Masuk',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ),
                     ),
-
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {},
